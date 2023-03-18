@@ -1,6 +1,5 @@
 #include <iostream>
-#include <exception>
-#include <stdexcept>
+
 using namespace std;
 class Stack {
 private:
@@ -20,26 +19,28 @@ Stack::Stack(int size)
         {
             throw length_error("Розмір має бути більший нуля");
         }
-        stackstore = new int[1000000];
+        stackstore = new int[size];
         stacksize = size;
         SP = 0;
     }
-    catch (length_error& exc)
+    catch (length_error)
     {
         cout << "Розмір був заданий хибно, створення буде здійснено з наперед визначеними параметрами: розмір = 1000." << endl;
         stackstore = new int[1000];
         stacksize = 1000;
         SP = 0;
     }
-    catch (bad_alloc& exc)
+    catch (bad_alloc)
     {
         cout << "Розмір був заданий занадто великий!" << endl;
         throw;
     }
 }
-Stack::~Stack(void) {
+
+Stack::~Stack() {
     delete[]stackstore;
 }
+
 void Stack::push(int value) {
     try {
         if (SP == stacksize)
@@ -48,7 +49,7 @@ void Stack::push(int value) {
         }
         stackstore[SP++] = value;
     }
-    catch (...)
+    catch (logic_error)
     {
         cout << "Не можливо додати новий елемент!" << endl;
     }
@@ -61,7 +62,7 @@ int Stack::pop() {
         }
         return stackstore[--SP];
     }
-    catch (...)
+    catch (logic_error)
     {
         cout << "Нема що вилучити." << endl;
         SP = 0;
@@ -74,7 +75,7 @@ int main() {
         try {
             stk.pop();
         }
-        catch (...)
+        catch (logic_error)
         {
             cout << "Вилучення не здійснено." << endl;
         }
@@ -98,12 +99,12 @@ int main() {
             cout << "Забрали: " << stk.pop() << "." << endl;
             cout << "Забрали: " << stk.pop() << "." << endl;
         }
-        catch (...)
+        catch (logic_error)
         {
             cout << "Вилучення не здійснено." << endl;
         }
     }
-    catch (...)
+    catch (logic_error)
     {
         cout << "Розміщення в пам'яті не відбулося." << endl;
     }
